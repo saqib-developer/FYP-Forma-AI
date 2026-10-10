@@ -1,0 +1,27 @@
+<svg width="100%" viewBox="40 12 80 86" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>FORMA AI Design logo</title>
+  <desc>Minimal enterprise logo with opposing corner bracket marks and a four-pointed sparkle</desc>
+
+  <style>
+    .br { fill: none; stroke: #0F172A; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ac { fill: #6366F1; }
+    @media (prefers-color-scheme: dark) {
+      .br { stroke: #E2E8F0; }
+    }
+  </style>
+
+  <!-- Top-left bracket -->
+  <path class="br" d="M70,22 L50,22 L50,42"/>
+
+  <!-- Bottom-right bracket -->
+  <path class="br" d="M90,88 L110,88 L110,68"/>
+
+  <!-- Snap dots at bracket ends -->
+  <circle class="ac" cx="70" cy="22" r="2.5"/>
+  <circle class="ac" cx="50" cy="42" r="2.5"/>
+  <circle class="ac" cx="90" cy="88" r="2.5"/>
+  <circle class="ac" cx="110" cy="68" r="2.5"/>
+
+  <!-- 4-pointed AI sparkle, centered in implied frame -->
+  <path class="ac" d="M80,48 L81.8,53.2 L87,55 L81.8,56.8 L80,62 L78.2,56.8 L73,55 L78.2,53.2 Z"/>
+</svg>
