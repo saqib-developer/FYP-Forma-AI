@@ -117,132 +117,132 @@ const PrototypePlayer = ({ screenConfig, projectDetail, onClose }: Props) => {
   return (
     <div className="fixed inset-0 z-[200] bg-black flex flex-col overflow-hidden">
 
-      {/* ── Minimal HUD — always on top, only shows on hover ── */}
-      <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-5 py-3 bg-gradient-to-b from-black/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-200 group">
-        {/* Left: Back + Restart */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={goBack}
-            disabled={navHistory.length <= 1}
-            className="flex items-center gap-1 text-sm text-white/60 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Back
-          </button>
-          <button
-            onClick={restart}
-            className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Restart
-          </button>
-        </div>
-
-        {/* Center: screen name */}
-        <span className="text-white/70 text-sm font-medium tracking-tight select-none">
-          {activeScreen?.screenName}
-          {navHistory.length > 1 && (
-            <span className="ml-2 text-[10px] text-white/30 bg-white/10 px-2 py-0.5 rounded-full">
-              {navHistory.length} steps
-            </span>
-          )}
-        </span>
-
-        {/* Right: Close + hint */}
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] text-white/30 hidden sm:block">Press Esc to exit</span>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* ── The Screen itself — takes full area ── */}
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
-        {isMobile ? (
-          // Mobile: centered phone frame, fills height
-          <div
-            className="relative shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-white/10 rounded-[3rem] overflow-hidden flex-shrink-0"
-            style={{
-              width: 'min(420px, calc(100vw - 48px))',
-              height: 'min(900px, calc(100vh - 48px))',
-            }}
-          >
-            {/* Phone notch */}
-            <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-5 bg-black rounded-full z-10 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-slate-800" />
-            </div>
-            <iframe
-              key={activeScreenId}
-              ref={iframeRef}
-              srcDoc={htmlWrapper(theme, activeScreen?.code ?? '')}
-              className="w-full h-full border-0"
-              sandbox="allow-scripts allow-same-origin"
-            />
+        {/* ── Minimal HUD — always on top, shows on hover on desktop, always visible on mobile/touch ── */}
+        <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-3 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-b from-black/80 via-black/50 to-transparent opacity-90 sm:opacity-0 sm:hover:opacity-100 transition-opacity duration-200 group">
+          {/* Left: Back + Restart */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={goBack}
+              disabled={navHistory.length <= 1}
+              className="flex items-center gap-1 text-sm text-white/60 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back
+            </button>
+            <button
+              onClick={restart}
+              className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Restart
+            </button>
           </div>
-        ) : (
-          // Website: full width, constrained height — NO outer frame, feels native
-          <div
-            className="relative overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border-x border-white/5"
-            style={{
-              width: '100vw',
-              height: '100vh',
-            }}
-          >
-            <iframe
-              key={activeScreenId}
-              ref={iframeRef}
-              srcDoc={htmlWrapper(theme, activeScreen?.code ?? '')}
-              className="w-full h-full border-0"
-              sandbox="allow-scripts allow-same-origin"
-            />
+
+          {/* Center: screen name */}
+          <span className="text-white/70 text-sm font-medium tracking-tight select-none">
+            {activeScreen?.screenName}
+            {navHistory.length > 1 && (
+              <span className="ml-2 text-[10px] text-white/30 bg-white/10 px-2 py-0.5 rounded-full">
+                {navHistory.length} steps
+              </span>
+            )}
+          </span>
+
+          {/* Right: Close + hint */}
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] text-white/30 hidden sm:block">Press Esc to exit</span>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* ── The Screen itself — takes full area ── */}
+        <div className="flex-1 flex items-center justify-center overflow-hidden">
+          {isMobile ? (
+            // Mobile: centered phone frame, fills height
+            <div
+              className="relative shadow-[0_0_80px_rgba(0,0,0,0.9)] border border-white/10 rounded-[3rem] overflow-hidden flex-shrink-0"
+              style={{
+                width: 'min(420px, calc(100vw - 48px))',
+                height: 'min(900px, calc(100vh - 48px))',
+              }}
+            >
+              {/* Phone notch */}
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-5 bg-black rounded-full z-10 flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-slate-800" />
+              </div>
+              <iframe
+                key={activeScreenId}
+                ref={iframeRef}
+                srcDoc={htmlWrapper(theme, activeScreen?.code ?? '')}
+                className="w-full h-full border-0"
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          ) : (
+            // Website: full width, constrained height — NO outer frame, feels native
+            <div
+              className="relative overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] border-x border-white/5"
+              style={{
+                width: '100vw',
+                height: '100vh',
+              }}
+            >
+              <iframe
+                key={activeScreenId}
+                ref={iframeRef}
+                srcDoc={htmlWrapper(theme, activeScreen?.code ?? '')}
+                className="w-full h-full border-0"
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* ── Left/Right arrow navigation ── */}
+        {validScreens.length > 1 && (
+          <>
+            <button
+              onClick={goPrev}
+              disabled={activeIndex === 0}
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white disabled:opacity-0 transition-all"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={goNext}
+              disabled={activeIndex === validScreens.length - 1}
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white disabled:opacity-0 transition-all"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </>
+        )}
+
+        {/* ── Bottom dot navigation ── */}
+        {validScreens.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+            {validScreens.map((s, i) => (
+              <button
+                key={s.screenId}
+                onClick={() => navigateTo(s.screenId)}
+                title={s.screenName}
+                className={cn(
+                  'h-1.5 rounded-full transition-all duration-300',
+                  s.screenId === activeScreenId
+                    ? 'w-6 bg-white'
+                    : 'w-1.5 bg-white/25 hover:bg-white/50'
+                )}
+              />
+            ))}
           </div>
         )}
       </div>
-
-      {/* ── Left/Right arrow navigation ── */}
-      {validScreens.length > 1 && (
-        <>
-          <button
-            onClick={goPrev}
-            disabled={activeIndex === 0}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white disabled:opacity-0 transition-all"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={goNext}
-            disabled={activeIndex === validScreens.length - 1}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white disabled:opacity-0 transition-all"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </>
-      )}
-
-      {/* ── Bottom dot navigation ── */}
-      {validScreens.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-          {validScreens.map((s, i) => (
-            <button
-              key={s.screenId}
-              onClick={() => navigateTo(s.screenId)}
-              title={s.screenName}
-              className={cn(
-                'h-1.5 rounded-full transition-all duration-300',
-                s.screenId === activeScreenId
-                  ? 'w-6 bg-white'
-                  : 'w-1.5 bg-white/25 hover:bg-white/50'
-              )}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  )
+      )
 }
 
-export default PrototypePlayer
+      export default PrototypePlayer

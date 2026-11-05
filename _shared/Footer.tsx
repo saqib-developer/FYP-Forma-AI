@@ -13,33 +13,33 @@ const Footer = () => {
               Transform your ideas into stunning designs with AI.
             </p>
           </div>
-          
-          <div className="flex items-center gap-6 text-sm text-slate-600 dark:text-slate-400">
-            <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Features
-            </Link>
-            <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Pricing
-            </Link>
-            <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              Terms of Service
-            </Link>
+
+            <div className="flex flex-wrap justify-center md:justify-end items-center gap-3 sm:gap-6 text-sm text-slate-600 dark:text-slate-400">
+              <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                Features
+              </Link>
+              <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                Pricing
+              </Link>
+              <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              &copy; {new Date().getFullYear()} Forma. All rights reserved.
+            </p>
+
+            <div className="flex items-center gap-4">
+              {/* Social Icons could go here */}
+            </div>
           </div>
         </div>
-        
-        <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            &copy; {new Date().getFullYear()} Forma. All rights reserved.
-          </p>
-          
-          <div className="flex items-center gap-4">
-            {/* Social Icons could go here */}
-          </div>
-        </div>
-      </div>
     </footer>
   )
 }

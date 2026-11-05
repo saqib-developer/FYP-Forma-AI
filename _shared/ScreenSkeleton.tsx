@@ -13,7 +13,7 @@ type Props = {
 const ScreenSkeleton = ({ x, y, width, height, screenName, isGenerating = true }: Props) => {
   return (
     <div
-      className="absolute border border-slate-200/80 rounded-[2rem] overflow-hidden bg-slate-50"
+      className="absolute border border-slate-200/80 rounded-2xl overflow-hidden bg-slate-50 shadow-[0_0_40px_-15px_rgba(0,0,0,0.15)] ring-1 ring-slate-200/60"
       style={{ left: x, top: y, width, height }}
     >
       {/* Shimmer overlay */}

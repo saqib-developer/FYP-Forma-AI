@@ -100,12 +100,12 @@ const ProjectCanvasPlayground = () => {
   }
 
   return (
-    <div className='h-screen flex flex-col'>
+    <div className='h-screen h-[100dvh] flex flex-col overflow-hidden w-full'>
       <ProjectHeader screenConfig={screenConfig} projectDetail={projectDetail} />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {loading && !projectDetail && <Loading loading={true} message="Loading Project Details..." />}
         <ProjectSettings projectDetail={projectDetail} screenConfig={screenConfig} />
-        <div className="flex-1 transition-all duration-300 overflow-hidden">
+        <div className="flex-1 transition-all duration-300 overflow-hidden relative">
           <Canvas
             projectDetail={projectDetail}
             screenConfig={screenConfig}

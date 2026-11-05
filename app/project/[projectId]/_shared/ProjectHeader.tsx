@@ -91,12 +91,12 @@ const ProjectHeader = ({ screenConfig = [], projectDetail }: Props) => {
       toast.loading("Capturing project preview...", { id: 'screenshot-header' })
 
       const capturedImages: HTMLCanvasElement[] = []
-      
+
       for (let i = 0; i < iframes.length; i++) {
         const iframe = iframes[i]
         const doc = iframe.contentDocument || iframe.contentWindow?.document
         if (!doc) continue
-        
+
         const body = doc.body
         const canvas = await html2canvas(body, {
           useCORS: true,
@@ -134,7 +134,7 @@ const ProjectHeader = ({ screenConfig = [], projectDetail }: Props) => {
         ctx.shadowBlur = 20
         ctx.shadowOffsetX = 0
         ctx.shadowOffsetY = 10
-        
+
         ctx.drawImage(canvas, currentX, 50)
         currentX += canvas.width + gap
       })
@@ -170,36 +170,40 @@ const ProjectHeader = ({ screenConfig = [], projectDetail }: Props) => {
   }
   return (
     <>
-      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
-        <nav className="w-full px-6">
-          <div className="flex items-center justify-between h-16">
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-30 flex-shrink-0">
+        <nav className="w-full px-3 sm:px-6">
+          <div className="flex items-center justify-between h-14 sm:h-16 gap-2 sm:gap-4">
             {/* Logo on Left */}
-            <div className="flex items-center">
+            <div className="flex items-center flex-shrink-0">
               <Logo />
             </div>
 
             {/* Action Buttons on Right */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 md:gap-2.5 flex-shrink-0">
               {/* Assistant */}
               <Button
                 variant="outline"
-                className="flex items-center gap-2 text-sm h-9 px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                size="sm"
+                title="Forma Assistant"
+                className="flex items-center gap-1.5 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex-shrink-0"
                 onClick={() => setChatbotOpen(true)}
               >
-                <MessageCircle className="w-4 h-4" />
-                Assistant
+                <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                <span className="hidden xl:inline">Assistant</span>
               </Button>
 
               {/* Shot */}
               {hasGeneratedScreens && (
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-sm h-9 px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  size="sm"
+                  title="Capture Screenshot"
+                  className="flex items-center gap-1.5 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex-shrink-0"
                   onClick={handleScreenshot}
                   disabled={isCapturing}
                 >
-                  {isCapturing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
-                  Shot
+                  {isCapturing ? <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" /> : <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />}
+                  <span className="hidden lg:inline">Shot</span>
                 </Button>
               )}
 
@@ -207,11 +211,13 @@ const ProjectHeader = ({ screenConfig = [], projectDetail }: Props) => {
               {hasGeneratedScreens && (
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-sm h-9 px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  size="sm"
+                  title="Share Project"
+                  className="flex items-center gap-1.5 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex-shrink-0"
                   onClick={handleShare}
                 >
-                  <Share className="w-4 h-4" />
-                  Share
+                  <Share className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                  <span className="hidden lg:inline">Share</span>
                 </Button>
               )}
 
@@ -219,12 +225,14 @@ const ProjectHeader = ({ screenConfig = [], projectDetail }: Props) => {
               {hasGeneratedScreens && (
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-sm h-9 px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  size="sm"
+                  title="Export Design Tokens"
+                  className="flex items-center gap-1.5 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex-shrink-0"
                   onClick={onExport}
                   disabled={isExporting}
                 >
-                  {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-                  Export
+                  {isExporting ? <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" /> : <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />}
+                  <span className="hidden md:inline">Export</span>
                 </Button>
               )}
 
@@ -232,41 +240,46 @@ const ProjectHeader = ({ screenConfig = [], projectDetail }: Props) => {
               {hasGeneratedScreens && hasValidTheme && (
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 text-sm h-9 px-4 border-violet-200 dark:border-violet-800 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/30"
+                  size="sm"
+                  title="Play Prototype"
+                  className="flex items-center gap-1.5 text-xs sm:text-sm h-8 sm:h-9 px-2.5 sm:px-4 border-violet-200 dark:border-violet-800 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/30 flex-shrink-0"
                   onClick={() => setIsPlaying(true)}
                 >
-                  <Play className="w-4 h-4 fill-current" />
-                  Play
+                  <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current flex-shrink-0" />
+                  <span className="hidden sm:inline">Play</span>
                 </Button>
               )}
 
               {/* Save */}
               <Button
-                className="bg-rose-500 hover:bg-rose-600 cursor-pointer text-white font-medium px-5 py-2 rounded-md shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2"
+                size="sm"
+                title="Save Project"
+                className="bg-rose-500 hover:bg-rose-600 cursor-pointer text-white font-medium text-xs sm:text-sm h-8 sm:h-9 px-3 sm:px-4 rounded-md shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-1.5 flex-shrink-0"
                 onClick={onSave}
                 disabled={loading}
               >
-                <span className="flex items-center gap-1">
-                  {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
-                  {loading ? 'Saving...' : 'Save'}
-                </span>
+                {loading ? <Loader2 className="animate-spin w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />}
+                <span className="hidden sm:inline">{loading ? 'Saving...' : 'Save'}</span>
               </Button>
-              {mounted && <UserButton />}
-            </div>
-          </div>
-        </nav>
-      </header>
 
-      {/* Prototype Player Overlay */}
-      {isPlaying && projectDetail && (
-        <PrototypePlayer
-          screenConfig={screenConfig}
-          projectDetail={projectDetail}
-          onClose={() => setIsPlaying(false)}
-        />
-      )}
-    </>
-  )
+              <div className="flex-shrink-0 flex items-center ml-0.5 sm:ml-1">
+                          {mounted && <UserButton />}
+                        </div>
+                      </div>
+                    </div>
+                  </nav>
+                </header>
+
+                {/* Prototype Player Overlay */}
+                {isPlaying && projectDetail && (
+                  <PrototypePlayer
+                    screenConfig={screenConfig}
+                    projectDetail={projectDetail}
+                    onClose={() => setIsPlaying(false)}
+                  />
+                )}
+              </>
+              )
 }
 
-export default ProjectHeader
+              export default ProjectHeader

@@ -1,6 +1,6 @@
 'use client'
 
-import { TransformWrapper, TransformComponent, useControls, ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
+import { TransformWrapper, TransformComponent, useControls, ReactZoomPanPinchContentRef } from "react-zoom-pan-pinch";
 import React, { useState, useRef, useEffect } from 'react'
 import ScreenFrame from "./ScreenFrame";
 import ScreenSkeleton from "./ScreenSkeleton";
@@ -19,11 +19,30 @@ type Props = {
 
 const Canvas = ({projectDetail, screenConfig, loading, generatingScreenId}: Props) => {
   const [panningEnabled, setPanningEnabled] = useState(true);
+  const [currentScale, setCurrentScale] = useState(0.5);
   const isMobile = projectDetail?.device === 'MOBILE';
   const SCREEN_WIDTH = isMobile ? 400 : 1200;
   const SCREEN_HEIGHT = isMobile ? 844 : 900;
   const gap = isMobile ? 10 : 70;
-  const transformRef = useRef<ReactZoomPanPinchRef>(null);
+  const Y_OFFSET = 75;
+  const transformRef = useRef<ReactZoomPanPinchContentRef>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const centerScreen = (
+    index: number, 
+    setTransformFn?: (x: number, y: number, scale: number, animTime?: number) => void
+  ) => {
+    const fn = setTransformFn || transformRef.current?.setTransform;
+    if (!fn) return;
+    const containerW = containerRef.current?.clientWidth || window.innerWidth;
+    const containerH = containerRef.current?.clientHeight || window.innerHeight;
+    const scale = isMobile ? 0.75 : 0.6;
+    const screenCenterX = index * (SCREEN_WIDTH + gap) + SCREEN_WIDTH / 2;
+    const screenCenterY = Y_OFFSET + SCREEN_HEIGHT / 2;
+    const xPos = (containerW / 2) - (screenCenterX * scale);
+    const yPos = (containerH / 2) - (screenCenterY * scale);
+    fn(xPos, yPos, scale, 300);
+  };
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -31,9 +50,7 @@ const Canvas = ({projectDetail, screenConfig, loading, generatingScreenId}: Prop
         const targetScreenId = event.data.targetScreenId;
         const index = screenConfig.findIndex(s => s.screenId === targetScreenId);
         if (index !== -1) {
-          const scale = 0.6;
-          const xPos = -(index * (SCREEN_WIDTH + gap)) * scale + 150;
-          transformRef.current?.setTransform(xPos, 50, scale, 300);
+          centerScreen(index);
         }
       }
     };
@@ -44,54 +61,72 @@ const Canvas = ({projectDetail, screenConfig, loading, generatingScreenId}: Prop
     };
   }, [screenConfig, SCREEN_WIDTH, gap]);
 
-  const Controls = () => {
+  const Controls = ({ scale = 0.5 }: { scale?: number }) => {
     const { zoomIn, zoomOut, resetTransform } = useControls();
 
     return (
-        <div className="flex items-center gap-0.5 bg-white/20 backdrop-blur-lg px-1 py-0.5 rounded-lg border border-white/10 shadow-sm">
-            <Button variant="ghost" size="icon" onClick={() => zoomIn()} className="h-6 w-6 rounded-md hover:bg-white/20 transition-colors">
-                <Plus className="w-3 h-3 text-slate-700" />
+        <div className="flex items-center gap-1 bg-white/70 dark:bg-slate-800/70 backdrop-blur-lg px-1.5 py-1 rounded-lg border border-white/30 dark:border-white/10 shadow-sm flex-shrink-0">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              title="Zoom In"
+              onClick={() => zoomIn()} 
+              className="h-7 w-7 rounded-md hover:bg-white/40 dark:hover:bg-slate-700 transition-colors"
+            >
+                <Plus className="w-3.5 h-3.5 text-slate-700 dark:text-slate-200" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => zoomOut()} className="h-6 w-6 rounded-md hover:bg-white/20 transition-colors">
-                <Minus className="w-3 h-3 text-slate-700" />
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 min-w-[34px] text-center select-none">
+                {Math.round((scale || 0.5) * 100)}%
+            </span>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              title="Zoom Out"
+              onClick={() => zoomOut()} 
+              className="h-7 w-7 rounded-md hover:bg-white/40 dark:hover:bg-slate-700 transition-colors"
+            >
+                <Minus className="w-3.5 h-3.5 text-slate-700 dark:text-slate-200" />
             </Button>
-            <div className="w-[1px] h-3 bg-slate-400/30 mx-0.5" />
-            <Button variant="ghost" size="icon" onClick={() => resetTransform()} className="h-6 w-6 rounded-md hover:bg-white/20 transition-colors">
-                <RefreshCcw className="w-2.5 h-2.5 text-slate-700" />
+            <div className="w-[1px] h-3.5 bg-slate-400/30 mx-0.5" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              title="Reset Zoom"
+              onClick={() => resetTransform()} 
+              className="h-7 w-7 rounded-md hover:bg-white/40 dark:hover:bg-slate-700 transition-colors"
+            >
+                <RefreshCcw className="w-3 h-3 text-slate-700 dark:text-slate-200" />
             </Button>
         </div>
     );
   };
 
-  const ScreenNavigator = () => {
+  const ScreenNavigator = ({ scale }: { scale: number }) => {
     const { setTransform } = useControls();
+    if (screenConfig.length === 0) return null;
 
     return (
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 p-1 bg-white/40 backdrop-blur-2xl rounded-xl border border-white/30 shadow-2xl max-w-[90vw]">
-        <div className="px-1">
-          <Controls />
+      <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 sm:gap-2 p-1 sm:p-1.5 bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl rounded-xl border border-white/40 dark:border-white/10 shadow-2xl max-w-[calc(100%-1.5rem)]">
+        <div className="flex-shrink-0">
+          <Controls scale={scale} />
         </div>
         
-        <div className="w-[1px] h-5 bg-slate-400/20 hidden md:block" />
+        <div className="w-[1px] h-5 bg-slate-400/20 flex-shrink-0" />
 
-        <div className="flex gap-0.5 overflow-x-auto scrollbar-hide py-0.5 px-1 max-w-full">
+        <div className="flex gap-1 overflow-x-auto scrollbar-hide py-0.5 px-1 max-w-full">
             {screenConfig.map((screen, index) => (
             <Button
                 key={index}
                 variant="ghost"
                 size="sm"
-                onClick={() => {
-                const scale = 0.6;
-                const xPos = -(index * (SCREEN_WIDTH + gap)) * scale + 150;
-                setTransform(xPos, 50, scale);
-                }}
-                className="whitespace-nowrap flex items-center gap-1.5 hover:bg-white/30 transition-all rounded-lg border border-transparent hover:border-white/20 px-2 py-0.5 h-7 group"
+                onClick={() => centerScreen(index, setTransform)}
+                className="whitespace-nowrap flex items-center gap-1.5 hover:bg-white/40 dark:hover:bg-slate-800 transition-all rounded-lg border border-transparent hover:border-white/20 px-2 py-0.5 h-7 group flex-shrink-0"
             >
-                <div className="w-4 h-4 bg-primary/20 rounded-md flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                <div className="w-4 h-4 bg-primary/20 rounded-md flex items-center justify-center group-hover:bg-primary/30 transition-colors flex-shrink-0">
                     <span className="text-[8px] font-bold text-primary">{index + 1}</span>
                 </div>
                 <div className="flex flex-col items-start text-left">
-                    <span className="text-[10px] font-bold text-slate-800 truncate max-w-[90px] leading-none text-nowrap">
+                    <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate max-w-[80px] sm:max-w-[110px] leading-none text-nowrap">
                         {screen?.screenName || `Screen ${index + 1}`}
                     </span>
                 </div>
@@ -103,7 +138,9 @@ const Canvas = ({projectDetail, screenConfig, loading, generatingScreenId}: Prop
   };
 
   return (
-    <div className="w-full h-full bg-gray-100 overflow-hidden relative"
+    <div 
+        ref={containerRef}
+        className="w-full h-full bg-gray-100 dark:bg-slate-950 overflow-hidden relative"
         style={{
             backgroundImage: "radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px)",
             backgroundSize: "30px 30px"
@@ -120,22 +157,32 @@ const Canvas = ({projectDetail, screenConfig, loading, generatingScreenId}: Prop
             doubleClick={{ disabled: false }}
             panning={{ disabled: !panningEnabled, velocityDisabled: false }}
             velocityAnimation={{ sensitivity: 1, animationTime: 400, equalToMove: true }}
+            onInit={(ref) => setCurrentScale(ref.state.scale)}
+            onTransformed={(_, state) => setCurrentScale(state.scale)}
         >
             {() => (
         <>
-            <ScreenNavigator />
+            <ScreenNavigator scale={currentScale} />
             <TransformComponent
                 wrapperStyle={{width:'100%', height:'100%'}}
             >
-                <div className="flex" style={{ width: screenConfig.length * (SCREEN_WIDTH + gap) }}>
+                <div 
+                  className="flex relative" 
+                  style={{ 
+                    width: Math.max(screenConfig.length * (SCREEN_WIDTH + gap), SCREEN_WIDTH),
+                    minHeight: SCREEN_HEIGHT + 180,
+                    height: SCREEN_HEIGHT + 180
+                  }}
+                >
                 {screenConfig.map((screen, index) => (
                     <React.Fragment key={index}>
                         {screen?.code ? (
                             <ScreenFrame
                                 x={index * (SCREEN_WIDTH + gap)}
-                                y={0}
+                                y={Y_OFFSET}
                                 height={SCREEN_HEIGHT}
                                 width={SCREEN_WIDTH}
+                                scale={currentScale}
                                 setPanningEnabled={setPanningEnabled}
                                 html={screen?.code}
                                 projectDetail={projectDetail}
@@ -144,7 +191,7 @@ const Canvas = ({projectDetail, screenConfig, loading, generatingScreenId}: Prop
                         ) : (
                             <ScreenSkeleton
                                 x={index * (SCREEN_WIDTH + gap)}
-                                y={0}
+                                y={Y_OFFSET}
                                 width={SCREEN_WIDTH}
                                 height={SCREEN_HEIGHT}
                                 screenName={screen.screenName}
