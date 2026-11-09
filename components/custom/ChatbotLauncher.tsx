@@ -10,9 +10,14 @@ const ChatbotLauncher = () => {
   const { isOpen, setIsOpen } = useContext(ChatbotContext)
   const pathname = usePathname()
 
-  // Hide the floating bubble on the project canvas — there it's reachable
-  // from the toolbar icon in ProjectHeader instead, to keep the workspace clean.
-  if (pathname?.startsWith('/project/')) return null
+  // Hide floating bubble on canvas workspace and auth pages
+  if (
+    pathname?.startsWith('/project/') ||
+    pathname?.startsWith('/sign-in') ||
+    pathname?.startsWith('/sign-up')
+  ) {
+    return null
+  }
 
   return (
     <button

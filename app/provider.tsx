@@ -6,6 +6,7 @@ import { SettingContext } from '@/context/SettingContext'
 import { RefreshDataContext, RefreshDataProps } from '@/context/RefreshDataContext'
 import { ChatbotContext } from '@/context/ChatbotContext'
 import { ProjectType } from '@/types/types'
+import { useUser } from '@clerk/nextjs'
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -16,10 +17,15 @@ function Provider({ children }: ProviderProps) {
   const [settingDetails, setSettingDetails] = useState<ProjectType | null>(null);
   const [refreshData, setRefreshData] = useState<RefreshDataProps | null>(null);
   const [chatbotOpen, setChatbotOpen] = useState(false);
+  const { user, isLoaded } = useUser();
 
   useEffect(() => {
-    CreateNewUser();
-  }, []);
+    if (isLoaded && user) {
+      CreateNewUser();
+    } else if (isLoaded && !user) {
+      setUserDetail(null);
+    }
+  }, [isLoaded, user]);
 
   const CreateNewUser = async () => {
     try {

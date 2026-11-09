@@ -90,39 +90,39 @@ export default function Page() {
       </div>
       
       {/* Right Side - Sign In Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 relative overflow-hidden">
-        {/* Subtle Background Pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div>
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-start lg:justify-center min-h-screen py-8 sm:py-12 px-4 sm:px-6 lg:px-12 pb-36 sm:pb-24 lg:pb-12 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 relative overflow-y-auto">
+        {/* Subtle Background Pattern & Decorative Blobs isolated */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div>
+          <div className="absolute top-10 right-10 w-20 h-20 bg-purple-200 dark:bg-purple-900/30 rounded-full blur-2xl opacity-60"></div>
+          <div className="absolute bottom-10 left-10 w-32 h-32 bg-indigo-200 dark:bg-indigo-900/30 rounded-full blur-2xl opacity-60"></div>
+        </div>
         
-        {/* Decorative Elements */}
-        <div className="absolute top-10 right-10 w-20 h-20 bg-purple-200 dark:bg-purple-900/30 rounded-full blur-2xl opacity-60"></div>
-        <div className="absolute bottom-10 left-10 w-32 h-32 bg-indigo-200 dark:bg-indigo-900/30 rounded-full blur-2xl opacity-60"></div>
-        
-        <div className="relative z-10 w-full max-w-md">
+        <div className="relative z-10 w-full max-w-md my-auto">
           {/* Mobile Logo */}
-          <div className="lg:hidden flex justify-center mb-8">
-            <div className="w-14 h-14 flex items-center justify-center">
-              <img src="/forma-logo.svg?v=2" alt="Forma Logo" className="w-14 h-14" />
+          <div className="lg:hidden flex justify-center mb-5 sm:mb-8">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
+              <img src="/forma-logo.svg?v=2" alt="Forma Logo" className="w-12 h-12 sm:w-14 sm:h-14" />
             </div>
           </div>
           
           {/* Welcome Text */}
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white mb-2">
+          <div className="text-center mb-5 sm:mb-8 px-2">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mb-1.5 sm:mb-2">
               Sign in to your account
             </h2>
-            <p className="text-slate-500 dark:text-slate-400">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
               Start creating amazing designs today
             </p>
           </div>
           
           {/* Clerk SignIn Component */}
-          <div className="clerk-sign-in-wrapper flex justify-center">
+          <div className="clerk-sign-in-wrapper flex justify-center w-full">
             <SignIn 
               appearance={{
                 elements: {
                   rootBox: "w-full",
-                  card: "bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl shadow-2xl shadow-purple-500/10 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl",
+                  card: "bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl shadow-2xl shadow-purple-500/10 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl w-full",
                   headerTitle: "hidden",
                   headerSubtitle: "hidden",
                   socialButtonsBlockButton: "bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 transition-all duration-200 rounded-xl font-medium",
@@ -147,11 +147,11 @@ export default function Page() {
           </div>
           
           {/* Footer */}
-          <p className="text-center text-sm text-slate-400 dark:text-slate-500 mt-8">
+          <p className="text-center text-xs sm:text-sm text-slate-400 dark:text-slate-500 mt-6 sm:mt-8 px-2 max-w-sm mx-auto leading-relaxed">
             By signing in, you agree to our{' '}
-            <a href="#" className="text-purple-600 dark:text-purple-400 hover:underline">Terms of Service</a>
+            <a href="#" className="text-purple-600 dark:text-purple-400 hover:underline font-medium">Terms of Service</a>
             {' '}and{' '}
-            <a href="#" className="text-purple-600 dark:text-purple-400 hover:underline">Privacy Policy</a>
+            <a href="#" className="text-purple-600 dark:text-purple-400 hover:underline font-medium">Privacy Policy</a>
           </p>
         </div>
       </div>
